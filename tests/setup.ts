@@ -42,3 +42,31 @@ vi.mock("@/lib/supabase", () => ({
     })),
   },
 }))
+
+/**
+ * vitest fetch mock
+ * Makes relative /api/* calls work in unit tests.
+ */
+import { vi } from "vitest"
+
+vi.stubGlobal("fetch", vi.fn(async (input: any, init?: any) => {
+  const url = typeof input === "string" ? input : (input?.url ?? "")
+
+  if (url === "/api/dashboard/kpis") {
+    return new Response(JSON.stringify({
+      ok: true,
+      data: {
+        kpis: {
+          totalContracts: 0,
+          totalContractors: 0,
+          totalWorkers: 0,
+          section3HoursPct: 0,
+          targetedHoursPct: 0
+        }
+      }
+    }), { status: 200, headers: { "Content-Type": "application/json" } })
+  }
+
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { "Content-Type": "application/json" } })
+})) as any
+

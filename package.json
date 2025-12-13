@@ -8,14 +8,15 @@
     "lint": "next lint",
     "playwright:install": "playwright install --with-deps",
     "start": "next start",
-    "test": "vitest",
+    "test": "vitest run",
     "test:all": "npm run lint && npm run test:coverage && npm run test:e2e",
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:ui": "playwright test --ui",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@ai-sdk/openai": "latest",
@@ -52,10 +53,6 @@
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "@testing-library/dom": "latest",
-    "@vitejs/plugin-react": "5.1.2",
-    "@vitest/browser-playwright": "latest",
-    "@vitest/browser-preview": "latest",
-    "@vitest/browser-webdriverio": "latest",
     "ai": "latest",
     "bufferutil": "latest",
     "child_process": "latest",
@@ -85,7 +82,6 @@
     "tailwindcss-animate": "^1.0.7",
     "utf-8-validate": "latest",
     "vaul": "latest",
-    "vite": "latest",
     "ws": "latest",
     "zod": "^3.25.1"
   },
@@ -94,11 +90,12 @@
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
-    "@types/node": "^22",
-    "@types/react": "18.2.0",
+    "@types/node": "^22.19.2",
+    "@types/react": "18.2.25",
     "@types/react-dom": "18.2.0",
-    "@vitest/coverage-v8": "^1.1.0",
-    "@vitest/ui": "^1.1.0",
+    "@vitejs/plugin-react": "4.3.4",
+    "@vitest/coverage-v8": "1.6.1",
+    "@vitest/ui": "1.6.1",
     "autoprefixer": "^10.0.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.35",
@@ -106,7 +103,8 @@
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5",
+    "vite": "5.4.11",
     "vite-tsconfig-paths": "^4.2.2",
-    "vitest": "^1.1.0"
+    "vitest": "1.6.1"
   }
 }

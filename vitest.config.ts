@@ -9,6 +9,19 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./tests/setup.ts"],
+
+    // Only run unit tests. Do NOT run Playwright E2E specs in Vitest.
+    include: ["tests/unit/**/*.{test,spec}.{ts,tsx}"],
+
+    // Exclude E2E + any duplicated copied folder content
+    exclude: [
+      "tests/e2e/**",
+      "**/tests/e2e/**",
+      "**/*@0.1.0 build/**",
+      "**/playwright/**",
+      "**/node_modules/**"
+    ],
+
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
