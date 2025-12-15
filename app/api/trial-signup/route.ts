@@ -52,7 +52,10 @@ export async function POST(request: Request) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-    if (!supabaseUrl || !serviceKey) {
+    
+    const slackWebhook = process.env.SLACK_WEBHOOK_URL
+console.log("[trial-signup] slackWebhook present =", Boolean(slackWebhook))
+if (!supabaseUrl || !serviceKey) {
       return NextResponse.json(
         { error: "Server missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" },
         { status: 500 }
@@ -87,8 +90,32 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("Supabase insert error:", error)
+    if (slackWebhook) {
+      try {
+        await sendSlackNotification(slackWebhook, "Trial signup FAILED (Supabase): " + error.message)
+      } catch (e) {
+        console.error("[trial-signup] Slack notify failed:", e)
+      }
+    }
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
+    // New trial signup sent to Slack (non-blocking)
+    if (slackWebhook) {
+      console.log("[trial-signup] about to send Slack message")
+      const msg =
+        "New trial signup: " +
+        (full_name || ((first_name + " " + last_name).trim())) +
+        " | " + email +
+        " | " + (company || "n/a") +
+        " | source=" + (source || "n/a")
+
+      try {
+        await sendSlackNotification(slackWebhook, msg)
+      } catch (e) {
+        console.error("[trial-signup] Slack notify failed:", e)
+      }
+    }
+
 
     return NextResponse.json({
       success: true,
@@ -100,3 +127,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: e?.message ?? "Internal server error" }, { status: 400 })
   }
 }
+
+async function sendSlackNotification(webhookUrl: string, text: string) {
+  const res = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  })
+
+  const body = await res.text().catch(() => "")
+  console.log("[trial-signup] Slack response:", res.status, body || "(no body)")
+
+  if (!res.ok) {
+    throw new Error("Slack webhook failed: " + res.status + " " + body)
+  }
+}
+
+
