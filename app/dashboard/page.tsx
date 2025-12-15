@@ -12,6 +12,11 @@ export default function DashboardPage() {
   const router = useRouter()
 
   useEffect(() => {
+    if (!isLoading && !user) {
+      router.replace('/login?next=%2Fdashboard')
+    }
+  }, [isLoading, user, router])
+  useEffect(() => {
     console.log("[v0] DashboardPage: user =", user, "isLoading =", isLoading)
 
     if (!isLoading && !user) {
@@ -53,3 +58,5 @@ export default function DashboardPage() {
       return <AdminDashboard />
   }
 }
+
+
