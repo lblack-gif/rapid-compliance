@@ -24,5 +24,7 @@
         }
       ]
     }
-  ]
+  ],
+  "redirects":[{"source":"/","destination":"/landing","permanent":false}]
 }
+
