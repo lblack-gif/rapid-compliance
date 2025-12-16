@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
+export const runtime = "nodejs";
+
 function reqString(v: unknown, name: string) {
   if (typeof v !== "string" || v.trim().length === 0) {
     throw new Error(`${name} is required`)
@@ -142,5 +144,6 @@ async function sendSlackNotification(webhookUrl: string, text: string) {
     throw new Error("Slack webhook failed: " + res.status + " " + body)
   }
 }
+
 
 
